@@ -9,6 +9,31 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+        <nav class="nav nav-pills flex-column flex-sm-row">
+            <a class="flex-sm-fill text-sm-center nav-link" href="scoreboard.html">View High Scores</a>
+            <a class="flex-sm-fill text-sm-center nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Time: <span id="timer">00</span></a>
+        </nav>
+
+        <div class="jumbotron quiz-container text-center">
+            <div class="wrapper w-75 m-auto">
+                <div class="intro-container" id="introContainer">
+                    <h1 class="display-4">JavaScript Coding Quiz</h1>
+                    <p class="lead">Try to answer the following code-related questions within the time limit. Keep in mind that <strong>the incorrect answer will penalize your score time by ten seconds!</strong></p>
+                    <a id="startBtn" class="btn btn-primary btn-lg" href="#" role="button">Start Quiz</a>
+                </div>
+
+                <div class="quiz-container" id="quizContainer" style="display: none;">
+                    <div id="quiz"></div>
+                        <p id="question">[Question]</p>
+                        <input id="option1" class="btn btn-primary" type="submit" value="Submit">
+                        <input id="option2" class="btn btn-primary" type="submit" value="Submit">
+                        <input id="option3" class="btn btn-primary" type="submit" value="Submit">
+                        <input id="option4" class="btn btn-primary" type="submit" value="Submit">
+                    </div>
+                    <div id="results"></div>
+            </div>
+        </div>
+        
     
     <script src="assets/js/script.js"></script>    
 </body>
