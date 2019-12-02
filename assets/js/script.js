@@ -57,16 +57,14 @@ var startBtn = document.querySelector("#startBtn");
 var introContainer = document.querySelector("#introContainer");
 var quizContainer = document.querySelector("#quizContainer");
 var quizQuestion = document.querySelector("#question");
-var quizOption1 = document.querySelector("#option1");
-var quizOption2 = document.querySelector("#option2");
-var quizOption3 = document.querySelector("#option3");
-var quizOption4 = document.querySelector("#option4");
+var optionsContainer = document.querySelector("#options");
+var results = document.querySelector("#results");
 
 
-var secondsLeft = 15;
+var secondsLeft = 60;
 var seconds;
 var interval;
-var input;
+
 
 
 // Functions
@@ -81,8 +79,7 @@ function startTimer() {
 }
 
 function renderTimer() {
-
-    seconds = secondsLeft % 15;
+    seconds = secondsLeft % 60;
 
     if (secondsLeft < 10) {
         secondsLeft = "0" + secondsLeft.toString();
@@ -107,23 +104,31 @@ function displayQuestions() {
         console.log(questions[i]);
     }
     quizQuestion.textContent = questions[0].question;
-    quizOption1.value = questions[0].choices[0];
-    quizOption2.value = questions[0].choices[1];
-    quizOption3.value = questions[0].choices[2];
-    quizOption4.value = questions[0].choices[3];
+    optionsContainer.children[0].value = questions[0].choices[0];
+    optionsContainer.children[1].value = questions[0].choices[1];
+    optionsContainer.children[2].value = questions[0].choices[2];
+    optionsContainer.children[3].value = questions[0].choices[3];
 }
 
-function chooseOption() {
-    input = //User's input choice ;
+function userChoice(event) {
+    var userInput = event.target.value;
+
+    var resultsMessage = document.createElement("p");
+    results.appendChild(resultsMessage);
+    resultsMessage.setAttribute("style", "border-top: thin solid grey; margin-top: 1em; padding-top: 1em;")
+
+    console.log("Chosen: " + userInput);
 
     console.log("Correct answer is: " + questions[0].correctAnswer);
-    console.log("Chosen: " + input);
-
-    if (input = questions[0].correctAnswer) {
+    
+    if (userInput === questions[0].correctAnswer) {
         console.log("Correct!");
+        resultsMessage.textContent = "Correct!";
     }
     else {
-        console.log("Incorrect!");
+        console.log("Incorrect...");
+        secondsLeft = secondsLeft - 10;
+        resultsMessage.textContent = "Incorrect...";
     }
 }
 
@@ -132,10 +137,4 @@ function chooseOption() {
 // Event Listeners
 startBtn.addEventListener("click", startTimer);
 startBtn.addEventListener("click", startQuestions);
-quizOption1.addEventListener("click", chooseOption);
-quizOption2.addEventListener("click", chooseOption);
-quizOption3.addEventListener("click", chooseOption);
-quizOption4.addEventListener("click", chooseOption);
-
-
-
+optionsContainer.addEventListener("click", userChoice);
