@@ -85,6 +85,10 @@ function renderTimer() {
         secondsLeft = "0" + secondsLeft.toString();
     }
 
+    if (secondsLeft <= 10) {
+        timer.setAttribute("style", "color: red;");
+    }
+
     if (secondsLeft <= 0) {
         clearInterval(interval);
     }
@@ -96,18 +100,18 @@ function startQuestions() {
     introContainer.setAttribute("style", "display: none;")
     quizContainer.setAttribute("style", "display: block;")
 
-    displayQuestions();
+    displayQuestions(0, 0);
 }
 
-function displayQuestions() {
-    for (var i = 0; i < questions.length; i++) {
-        console.log(questions[i]);
-    }
-    quizQuestion.textContent = questions[0].question;
-    optionsContainer.children[0].value = questions[0].choices[0];
-    optionsContainer.children[1].value = questions[0].choices[1];
-    optionsContainer.children[2].value = questions[0].choices[2];
-    optionsContainer.children[3].value = questions[0].choices[3];
+function displayQuestions(j, k) {
+    // for (var i = 0; i < questions.length; i++) {
+    //     console.log(questions[i]);
+    // }
+    quizQuestion.textContent = questions[j].question;
+    optionsContainer.children[0].value = questions[k].choices[0];
+    optionsContainer.children[1].value = questions[k].choices[1];
+    optionsContainer.children[2].value = questions[k].choices[2];
+    optionsContainer.children[3].value = questions[k].choices[3];
 }
 
 function userChoice(event) {
@@ -124,13 +128,18 @@ function userChoice(event) {
     if (userInput === questions[0].correctAnswer) {
         console.log("Correct!");
         resultsMessage.textContent = "Correct!";
+        results.setAttribute("style", "color: green;")
     }
     else {
         console.log("Incorrect...");
         secondsLeft = secondsLeft - 10;
         resultsMessage.textContent = "Incorrect...";
+        results.setAttribute("style", "color: red;")
     }
+    displayQuestions(1, 1);
+
 }
+
 
 
 
