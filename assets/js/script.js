@@ -59,42 +59,44 @@ var quizContainer = document.querySelector("#quizContainer");
 var quizQuestion = document.querySelector("#question");
 var optionsContainer = document.querySelector("#options");
 var results = document.querySelector("#results");
-var questionNumber = 0;
 
-
-var secondsLeft = 15;
-var seconds;
+var seconds = 60;
 var interval;
+var questionNumber = 0;
 
 
 
 // Functions
 function startTimer() {
-    timer.textContent = secondsLeft;
+    timer.textContent = seconds;
   
     interval = setInterval(function() {
-      secondsLeft--;
+      seconds--;
       renderTimer();
     }, 1000);
     
 }
 
 function renderTimer() {
-    seconds = secondsLeft % 15;
-
-    if (secondsLeft < 10) {
-        secondsLeft = "0" + secondsLeft.toString();
+    if (seconds < 10) {
+        seconds = "0" + seconds.toString();
     }
 
-    if (secondsLeft <= 10) {
+    if (seconds <= 10) {
         timer.setAttribute("style", "color: red;");
     }
 
-    if (secondsLeft <= 0) {
+    if (seconds <= 0) {
         clearInterval(interval);
     }
 
-    timer.textContent = secondsLeft;
+    timer.textContent = seconds;
+}
+
+
+function redirectScoreBoard(){
+    alert("Your time was: " + seconds + ". Redirecting to score board!");
+    window.location.href = "scoreboard.html";
 }
 
 function startQuestions() {
@@ -105,9 +107,9 @@ function startQuestions() {
 }
 
 function displayQuestions(j) {
-    // for (var i = 0; i < questions.length; i++) {
-    //     console.log(questions[i]);
-    // }
+    for (var i = 0; i < questions.length; i++) {
+        console.log(questions[i]);
+    }
     quizQuestion.textContent = questions[j].question;
     optionsContainer.children[0].value = questions[j].choices[0];
     optionsContainer.children[1].value = questions[j].choices[1];
@@ -123,8 +125,8 @@ function userChoice(event) {
     resultsMessage.setAttribute("style", "border-top: thin solid grey; margin-top: 1em; padding-top: 1em;")
 
     console.log("Chosen: " + userInput);
-
     console.log("Correct answer is: " + questions[questionNumber].correctAnswer);
+    console.log("---------");
     
     if (userInput === questions[questionNumber].correctAnswer) {
         console.log("Correct!");
@@ -133,16 +135,30 @@ function userChoice(event) {
     }
     else {
         console.log("Incorrect...");
-        secondsLeft = secondsLeft - 10;
-        resultsMessage.textContent = "Incorrect...";
+        resultsMessage.textContent = "Incorrect! -10 sec.";
         results.setAttribute("style", "color: red;")
+
+        if (seconds >= 10) {
+            seconds = seconds - 10;
+        }
+        else {
+            seconds = 1;
+        }
+    }
+    function removeResultsMessage(){
+        results.removeChild(resultsMessage);
     }
 
-    questionNumber++;
+    setTimeout(removeResultsMessage, 2000);
 
+    questionNumber++;
+    
     displayQuestions(questionNumber);
 
-    // ***Remove HTML message
+    if (questionNumber === 4) {
+        setTimeout(redirectScoreBoard, 4000);
+    }
+ 
 }
 
 
