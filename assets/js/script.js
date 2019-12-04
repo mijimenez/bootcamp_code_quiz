@@ -59,9 +59,10 @@ var quizContainer = document.querySelector("#quizContainer");
 var quizQuestion = document.querySelector("#question");
 var optionsContainer = document.querySelector("#options");
 var results = document.querySelector("#results");
+var questionNumber = 0;
 
 
-var secondsLeft = 60;
+var secondsLeft = 15;
 var seconds;
 var interval;
 
@@ -79,7 +80,7 @@ function startTimer() {
 }
 
 function renderTimer() {
-    seconds = secondsLeft % 60;
+    seconds = secondsLeft % 15;
 
     if (secondsLeft < 10) {
         secondsLeft = "0" + secondsLeft.toString();
@@ -100,18 +101,18 @@ function startQuestions() {
     introContainer.setAttribute("style", "display: none;")
     quizContainer.setAttribute("style", "display: block;")
 
-    displayQuestions(0, 0);
+    displayQuestions(0);
 }
 
-function displayQuestions(j, k) {
+function displayQuestions(j) {
     // for (var i = 0; i < questions.length; i++) {
     //     console.log(questions[i]);
     // }
     quizQuestion.textContent = questions[j].question;
-    optionsContainer.children[0].value = questions[k].choices[0];
-    optionsContainer.children[1].value = questions[k].choices[1];
-    optionsContainer.children[2].value = questions[k].choices[2];
-    optionsContainer.children[3].value = questions[k].choices[3];
+    optionsContainer.children[0].value = questions[j].choices[0];
+    optionsContainer.children[1].value = questions[j].choices[1];
+    optionsContainer.children[2].value = questions[j].choices[2];
+    optionsContainer.children[3].value = questions[j].choices[3];
 }
 
 function userChoice(event) {
@@ -123,9 +124,9 @@ function userChoice(event) {
 
     console.log("Chosen: " + userInput);
 
-    console.log("Correct answer is: " + questions[0].correctAnswer);
+    console.log("Correct answer is: " + questions[questionNumber].correctAnswer);
     
-    if (userInput === questions[0].correctAnswer) {
+    if (userInput === questions[questionNumber].correctAnswer) {
         console.log("Correct!");
         resultsMessage.textContent = "Correct!";
         results.setAttribute("style", "color: green;")
@@ -136,8 +137,12 @@ function userChoice(event) {
         resultsMessage.textContent = "Incorrect...";
         results.setAttribute("style", "color: red;")
     }
-    displayQuestions(1, 1);
 
+    questionNumber++;
+
+    displayQuestions(questionNumber);
+
+    // ***Remove HTML message
 }
 
 
