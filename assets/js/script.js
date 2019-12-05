@@ -1,7 +1,7 @@
 // Variables
 var questions = [
       {
-        question: "Commonly used data types DO NOT include:",
+        question: "1/5: Commonly used data types DO NOT include:",
         choices: [
           "strings",
           "booleans",
@@ -11,7 +11,7 @@ var questions = [
         correctAnswer: "alerts"
       },
       {
-        question: "The condition in an if/else statement is enclosed within _____.",
+        question: "2/5: The condition in an if/else statement is enclosed within _____.",
         choices: [
           "quotes",
           "curly brackets",
@@ -21,7 +21,7 @@ var questions = [
         correctAnswer: "parentheses"
       },
       {
-        question: "Arrays in JavaScript can be used to store _____.",
+        question: "3/5: Arrays in JavaScript can be used to store _____.",
         choices: [
           "numbers and strings",
           "other arrays",
@@ -31,7 +31,7 @@ var questions = [
         correctAnswer: "all of the above"
       },
       {
-        question: "String values must be enclosed within _____ when being assigned to variables.",
+        question: "4/5: String values must be enclosed within _____ when being assigned to variables.",
         choices: [
           "commas",
           "curly brackets",
@@ -41,7 +41,7 @@ var questions = [
         correctAnswer: "quotes"
       },
       {
-        question: "A very useful tool used during development and debugging for printing content to the debugger is:",
+        question: "5/5: A very useful tool used during development and debugging for printing content to the debugger is:",
         choices: [
           "JavaScript",
           "terminal/bash",
@@ -59,6 +59,14 @@ var quizContainer = document.querySelector("#quizContainer");
 var quizQuestion = document.querySelector("#question");
 var optionsContainer = document.querySelector("#options");
 var results = document.querySelector("#results");
+var scoreContainer = document.querySelector("#finalScoreContainer");
+var finalScore = document.querySelector("#finalScore");
+// Variables on scorboard page
+var highScoresList = document.querySelector("#highScoresList");
+var initialsForm = document.querySelector("#initialsForm");
+var initialsInput = document.querySelector("#initialsInput");
+
+var highScores = [];
 
 var seconds = 60;
 var interval;
@@ -67,6 +75,56 @@ var questionNumber = 0;
 
 
 // Functions
+function renderHighScores() {
+    // highScoresList.innerHTML = "";
+
+    for (var k = 0; k < highScores.length; k++) {
+        var highScoreItem = highScores[k];
+
+        var li = document.createElement("li");
+        li.textContent = highScoreItem;
+        li.setAttribute("data-index", k);
+
+        highScoresList.appendChild(li);
+    }
+}
+
+
+function init() {
+    var storedHighScores = JSON.parse(localStorage.getItem("highScores"));
+
+    if (storedHighScores !== null) {
+        highScores = storedHighScores;
+    }
+ 
+    renderHighScores();
+  }
+  
+  function storeHighScores() {
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+  }
+
+
+
+initialsForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    var initialsInputText = initialsInput.value.trim();
+
+    if (initialsInputText === "") {
+        return;
+    }
+
+    highScores.push(initialsInputText);
+    initialsInput.value = "";
+
+    storeHighScores()
+    renderHighScores();
+});
+
+
+
+
 function startTimer() {
     timer.textContent = seconds;
   
@@ -103,18 +161,25 @@ function startQuestions() {
     introContainer.setAttribute("style", "display: none;")
     quizContainer.setAttribute("style", "display: block;")
 
-    displayQuestions(0);
+    displayQuestions(questionNumber);
 }
 
 function displayQuestions(j) {
-    for (var i = 0; i < questions.length; i++) {
-        console.log(questions[i]);
-    }
+    // for (var i = 0; i < questions.length; i++) {
+    //     console.log(questions[i]);
+    // }
     quizQuestion.textContent = questions[j].question;
     optionsContainer.children[0].value = questions[j].choices[0];
     optionsContainer.children[1].value = questions[j].choices[1];
     optionsContainer.children[2].value = questions[j].choices[2];
     optionsContainer.children[3].value = questions[j].choices[3];
+}
+
+function displayFinalScore() {
+    quizContainer.setAttribute("style", "display: none;")
+    scoreContainer.setAttribute("style", "display: block;")
+    finalScore.textContent = seconds;
+    clearInterval(interval);
 }
 
 function userChoice(event) {
@@ -149,16 +214,16 @@ function userChoice(event) {
         results.removeChild(resultsMessage);
     }
 
-    setTimeout(removeResultsMessage, 2000);
+    setTimeout(removeResultsMessage, 1000);
 
     questionNumber++;
-    
-    displayQuestions(questionNumber);
 
+    displayQuestions(questionNumber);
+    
     if (questionNumber === 4) {
-        setTimeout(redirectScoreBoard, 4000);
+        // setTimeout(redirectScoreBoard, 1000);
+        setTimeout(displayFinalScore, 3000);  
     }
- 
 }
 
 
