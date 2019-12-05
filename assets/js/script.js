@@ -61,10 +61,11 @@ var optionsContainer = document.querySelector("#options");
 var results = document.querySelector("#results");
 var scoreContainer = document.querySelector("#finalScoreContainer");
 var finalScore = document.querySelector("#finalScore");
-// Variables on scorboard page
+
 var highScoresList = document.querySelector("#highScoresList");
-var initialsForm = document.querySelector("#initialsForm");
+var initialsSubmit = document.querySelector("#initialsSubmit");
 var initialsInput = document.querySelector("#initialsInput");
+var clearHighscores = document.querySelector("#clearHighscores");
 
 var highScores = [];
 
@@ -75,56 +76,6 @@ var questionNumber = 0;
 
 
 // Functions
-function renderHighScores() {
-    // highScoresList.innerHTML = "";
-
-    for (var k = 0; k < highScores.length; k++) {
-        var highScoreItem = highScores[k];
-
-        var li = document.createElement("li");
-        li.textContent = highScoreItem;
-        li.setAttribute("data-index", k);
-
-        highScoresList.appendChild(li);
-    }
-}
-
-
-function init() {
-    var storedHighScores = JSON.parse(localStorage.getItem("highScores"));
-
-    if (storedHighScores !== null) {
-        highScores = storedHighScores;
-    }
- 
-    renderHighScores();
-  }
-  
-  function storeHighScores() {
-    localStorage.setItem("highScores", JSON.stringify(highScores));
-  }
-
-
-
-initialsForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    var initialsInputText = initialsInput.value.trim();
-
-    if (initialsInputText === "") {
-        return;
-    }
-
-    highScores.push(initialsInputText);
-    initialsInput.value = "";
-
-    storeHighScores()
-    renderHighScores();
-});
-
-
-
-
 function startTimer() {
     timer.textContent = seconds;
   
@@ -151,12 +102,6 @@ function renderTimer() {
     timer.textContent = seconds;
 }
 
-
-function redirectScoreBoard(){
-    alert("Your time was: " + seconds + ". Redirecting to score board!");
-    window.location.href = "scoreboard.html";
-}
-
 function startQuestions() {
     introContainer.setAttribute("style", "display: none;")
     quizContainer.setAttribute("style", "display: block;")
@@ -165,9 +110,6 @@ function startQuestions() {
 }
 
 function displayQuestions(j) {
-    // for (var i = 0; i < questions.length; i++) {
-    //     console.log(questions[i]);
-    // }
     quizQuestion.textContent = questions[j].question;
     optionsContainer.children[0].value = questions[j].choices[0];
     optionsContainer.children[1].value = questions[j].choices[1];
@@ -220,11 +162,70 @@ function userChoice(event) {
 
     displayQuestions(questionNumber);
     
+    // HELP: Can't get final score to display after answer is chosen on last question. It switches immediately when the question is displayed instead of waiting for click.
     if (questionNumber === 4) {
-        // setTimeout(redirectScoreBoard, 1000);
         setTimeout(displayFinalScore, 3000);  
     }
 }
+
+// HELP: Can't get list items to populate on scoreboards page
+function renderHighScores() {
+    highScoresList.innerHTML = "";
+
+    for (var k = 0; k < highScores.length; k++) {
+        var highScoreItem = highScores[k];
+
+        var li = document.createElement("li");
+        li.textContent = highScoreItem + " - " + seconds;
+        li.setAttribute("data-index", k);
+
+        highScoresList.appendChild(li);
+    }
+}
+
+
+function init() {
+    var storedHighScores = JSON.parse(localStorage.getItem("highScores"));
+
+    if (storedHighScores !== null) {
+        highScores = storedHighScores;
+    }
+ 
+    renderHighScores();
+  }
+  
+  function storeHighScores() {
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+  }
+
+  // HELP: Not adding each new submit into array. It only replaces one value in highScores to the new initials entered.
+  function submitInitials(event) {
+    window.location.href = "scoreboard.html";
+
+    event.preventDefault();
+
+    var initialsInputText = initialsInput.value.trim();
+
+    if (initialsInputText === "") {
+        return;
+    }
+
+    highScores.push(initialsInputText);
+    initialsInput.value = "";
+
+    storeHighScores();
+    renderHighScores();
+  };
+
+
+// HELP: Not clearing local storage
+    function clearScores() {
+        var index = element.parentElement.getAttribute("data-index");
+        highScores.splice(index, 1);
+    
+        storeHighScores();
+        renderHighScores();
+    };
 
 
 
@@ -233,3 +234,6 @@ function userChoice(event) {
 startBtn.addEventListener("click", startTimer);
 startBtn.addEventListener("click", startQuestions);
 optionsContainer.addEventListener("click", userChoice);
+
+initialsSubmit.addEventListener("click", submitInitials);
+clearHighscores.addEventListener("click", submitInitials);

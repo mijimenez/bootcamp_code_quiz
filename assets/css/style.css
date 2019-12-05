@@ -1,0 +1,22 @@
+body {
+    background-color: #e9ecef;
+    height: 100vh;
+}
+
+nav {
+    background-color: white;
+}
+
+.jumbotron .wrapper {
+    max-width: 540px;
+}
+
+@media screen and (max-width: 576px) {
+    #startBtn, #initialsSubmit {
+        width: 100%;
+    }
+}
+
+#options input {
+    margin-bottom: 1em;
+}
