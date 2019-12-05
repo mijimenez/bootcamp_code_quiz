@@ -65,7 +65,7 @@ var finalScore = document.querySelector("#finalScore");
 var highScoresList = document.querySelector("#highScoresList");
 var initialsSubmit = document.querySelector("#initialsSubmit");
 var initialsInput = document.querySelector("#initialsInput");
-var clearHighscores = document.querySelector("#clearHighscores");
+var clearHighscores = document.querySelector("#clearHighscoresID");
 
 var highScores = [];
 
@@ -78,6 +78,11 @@ var questionNumber = 0;
 // Functions
 function startTimer() {
     timer.textContent = seconds;
+
+    introContainer.setAttribute("style", "display: none;")
+    quizContainer.setAttribute("style", "display: block;")
+
+    displayQuestions(questionNumber);
   
     interval = setInterval(function() {
       seconds--;
@@ -102,14 +107,19 @@ function renderTimer() {
     timer.textContent = seconds;
 }
 
-function startQuestions() {
-    introContainer.setAttribute("style", "display: none;")
-    quizContainer.setAttribute("style", "display: block;")
+// function startQuestions() {
+//     introContainer.setAttribute("style", "display: none;")
+//     quizContainer.setAttribute("style", "display: block;")
 
-    displayQuestions(questionNumber);
-}
+//     displayQuestions(questionNumber);
+// }
 
 function displayQuestions(j) {
+    if (j === questions.length) {
+        clearInterval(interval);
+        setTimeout(displayFinalScore, 3000);
+        return;
+    }
     quizQuestion.textContent = questions[j].question;
     optionsContainer.children[0].value = questions[j].choices[0];
     optionsContainer.children[1].value = questions[j].choices[1];
@@ -163,9 +173,9 @@ function userChoice(event) {
     displayQuestions(questionNumber);
     
     // HELP: Can't get final score to display after answer is chosen on last question. It switches immediately when the question is displayed instead of waiting for click.
-    if (questionNumber === 4) {
-        setTimeout(displayFinalScore, 3000);  
-    }
+    // if (questionNumber === 4) {
+    //     setTimeout(displayFinalScore, 3000);  
+    // }
 }
 
 // HELP: Can't get list items to populate on scoreboards page
@@ -213,27 +223,26 @@ function init() {
     highScores.push(initialsInputText);
     initialsInput.value = "";
 
+    console.log(highScores);
     storeHighScores();
     renderHighScores();
   };
 
 
 // HELP: Not clearing local storage
-    function clearScores() {
-        var index = element.parentElement.getAttribute("data-index");
-        highScores.splice(index, 1);
+    // function clearScores() {
+    //     var index = element.parentElement.getAttribute("data-index");
+    //     highScores.splice(index, 1);
     
-        storeHighScores();
-        renderHighScores();
-    };
+    //     storeHighScores();
+    //     renderHighScores();
+    // };
 
 
 
 
 // Event Listeners
 startBtn.addEventListener("click", startTimer);
-startBtn.addEventListener("click", startQuestions);
 optionsContainer.addEventListener("click", userChoice);
-
 initialsSubmit.addEventListener("click", submitInitials);
-clearHighscores.addEventListener("click", submitInitials);
+// clearHighscores.addEventListener("click", clearScores);
