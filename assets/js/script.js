@@ -1,57 +1,4 @@
-// Variables
-var questions = [
-      {
-        question: "1/5: Commonly used data types DO NOT include:",
-        choices: [
-          "strings",
-          "booleans",
-          "alerts",
-          "numbers"
-        ],
-        correctAnswer: "alerts"
-      },
-      {
-        question: "2/5: The condition in an if/else statement is enclosed within _____.",
-        choices: [
-          "quotes",
-          "curly brackets",
-          "parentheses",
-          "square brackets"
-        ],
-        correctAnswer: "parentheses"
-      },
-      {
-        question: "3/5: Arrays in JavaScript can be used to store _____.",
-        choices: [
-          "numbers and strings",
-          "other arrays",
-          "booleans",
-          "all of the above"
-        ],
-        correctAnswer: "all of the above"
-      },
-      {
-        question: "4/5: String values must be enclosed within _____ when being assigned to variables.",
-        choices: [
-          "commas",
-          "curly brackets",
-          "quotes",
-          "parentheses"
-        ],
-        correctAnswer: "quotes"
-      },
-      {
-        question: "5/5: A very useful tool used during development and debugging for printing content to the debugger is:",
-        choices: [
-          "JavaScript",
-          "terminal/bash",
-          "for loops",
-          "console log"
-        ],
-        correctAnswer: "console log"
-      }
-    ]
-
+// ----- Variables
 var timer = document.querySelector("#timer");
 var startBtn = document.querySelector("#startBtn");
 var introContainer = document.querySelector("#introContainer");
@@ -59,15 +6,11 @@ var quizContainer = document.querySelector("#quizContainer");
 var quizQuestion = document.querySelector("#question");
 var optionsContainer = document.querySelector("#options");
 var results = document.querySelector("#results");
+var correctAudio = document.querySelector("#correctAudio");
+var incorrectAudio = document.querySelector("#incorrectAudio");
 var scoreContainer = document.querySelector("#finalScoreContainer");
 var finalScore = document.querySelector("#finalScore");
-
-var highScoresList = document.querySelector("#highScoresList");
-var initialsSubmit = document.querySelector("#initialsSubmit");
-var initialsInput = document.querySelector("#initialsInput");
-var clearHighscores = document.querySelector("#clearHighscoresID");
-
-var highScores = [];
+var highScores = getHighScores();
 
 var seconds = 60;
 var interval;
@@ -75,7 +18,8 @@ var questionNumber = 0;
 
 
 
-// Functions
+// ----- Functions
+//Start timer once "Start Quiz" CTA is clicked and displays to the DOM.
 function startTimer() {
     timer.textContent = seconds;
 
@@ -91,6 +35,7 @@ function startTimer() {
     
 }
 
+// If seconds is under 10, add a second 0 digit. If seconds get to 10, turn red for alerting user. If seconds get to 0 or negative, stop timer.
 function renderTimer() {
     if (seconds < 10) {
         seconds = "0" + seconds.toString();
@@ -107,33 +52,44 @@ function renderTimer() {
     timer.textContent = seconds;
 }
 
-// function startQuestions() {
-//     introContainer.setAttribute("style", "display: none;")
-//     quizContainer.setAttribute("style", "display: block;")
+// Get scores from local storage.
+function getHighScores() {
+    var storedHighScores = JSON.parse(localStorage.getItem("highScores"));
 
-//     displayQuestions(questionNumber);
-// }
+    if (storedHighScores === null) {
+        highScores = [];
+    }
+    else {
+        highScores = storedHighScores;
+    }
 
+    return(storedHighScores);
+  }
+
+// Shuffle through questions and populate multiple choices. After the last question. Display the final score.
 function displayQuestions(j) {
     if (j === questions.length) {
+        setTimeout(displayFinalScore, 2000);
         clearInterval(interval);
-        setTimeout(displayFinalScore, 3000);
         return;
     }
     quizQuestion.textContent = questions[j].question;
-    optionsContainer.children[0].value = questions[j].choices[0];
-    optionsContainer.children[1].value = questions[j].choices[1];
-    optionsContainer.children[2].value = questions[j].choices[2];
-    optionsContainer.children[3].value = questions[j].choices[3];
+    for (var i = 0; i < questions[j].choices.length; i++) {
+        optionsContainer.children[i].value = questions[j].choices[i];
+        console.log(questions[j].choices[i]);
+    }
 }
 
+// Remove quiz content and display final score with user input for initials.
 function displayFinalScore() {
     quizContainer.setAttribute("style", "display: none;")
     scoreContainer.setAttribute("style", "display: block;")
     finalScore.textContent = seconds;
     clearInterval(interval);
+    renderTimer();
 }
 
+// Target multiple choice clicked and check value against correct answer value. If correct, send good message and sound. If incorrect, send bad message, sound and deduct 10 seconds.
 function userChoice(event) {
     var userInput = event.target.value;
 
@@ -147,11 +103,13 @@ function userChoice(event) {
     
     if (userInput === questions[questionNumber].correctAnswer) {
         console.log("Correct!");
+        correctAudio.play(); 
         resultsMessage.textContent = "Correct!";
         results.setAttribute("style", "color: green;")
     }
     else {
         console.log("Incorrect...");
+        incorrectAudio.play(); 
         resultsMessage.textContent = "Incorrect! -10 sec.";
         results.setAttribute("style", "color: red;")
 
@@ -159,58 +117,25 @@ function userChoice(event) {
             seconds = seconds - 10;
         }
         else {
-            seconds = 1;
+            seconds = 0;
         }
     }
+    
+    // Remove results messages at .7 seconds.
     function removeResultsMessage(){
         results.removeChild(resultsMessage);
     }
 
-    setTimeout(removeResultsMessage, 1000);
+    setTimeout(removeResultsMessage, 700);
 
+    // Display next question.
     questionNumber++;
 
     displayQuestions(questionNumber);
-    
-    // HELP: Can't get final score to display after answer is chosen on last question. It switches immediately when the question is displayed instead of waiting for click.
-    // if (questionNumber === 4) {
-    //     setTimeout(displayFinalScore, 3000);  
-    // }
 }
 
-// HELP: Can't get list items to populate on scoreboards page
-function renderHighScores() {
-    highScoresList.innerHTML = "";
-
-    for (var k = 0; k < highScores.length; k++) {
-        var highScoreItem = highScores[k];
-
-        var li = document.createElement("li");
-        li.textContent = highScoreItem + " - " + seconds;
-        li.setAttribute("data-index", k);
-
-        highScoresList.appendChild(li);
-    }
-}
-
-
-function init() {
-    var storedHighScores = JSON.parse(localStorage.getItem("highScores"));
-
-    if (storedHighScores !== null) {
-        highScores = storedHighScores;
-    }
- 
-    renderHighScores();
-  }
-  
-  function storeHighScores() {
-    localStorage.setItem("highScores", JSON.stringify(highScores));
-  }
-
-  // HELP: Not adding each new submit into array. It only replaces one value in highScores to the new initials entered.
-  function submitInitials(event) {
-    window.location.href = "scoreboard.html";
+// Submit initals and final score once submit button is clicked.
+function submitInitials(event) {
 
     event.preventDefault();
 
@@ -220,29 +145,29 @@ function init() {
         return;
     }
 
-    highScores.push(initialsInputText);
+    // HELP: Cannot read property 'push' of null at HTMLButtonElement.submitInitials 
+    // Research: javascript loads before the HTML elements??
+    var str = initialsInputText + " " + seconds;
+    highScores.push(str);
     initialsInput.value = "";
 
     console.log(highScores);
+
     storeHighScores();
-    renderHighScores();
+
+    // After initials w/ score is submitted, redirect to the scoreboard.
+    window.location.href = "scoreboard.html";
   };
 
-
-// HELP: Not clearing local storage
-    // function clearScores() {
-    //     var index = element.parentElement.getAttribute("data-index");
-    //     highScores.splice(index, 1);
-    
-    //     storeHighScores();
-    //     renderHighScores();
-    // };
+  // Store scores to local storage.
+  function storeHighScores() {
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+  }
 
 
 
-
-// Event Listeners
+// ----- Event Listeners
 startBtn.addEventListener("click", startTimer);
 optionsContainer.addEventListener("click", userChoice);
 initialsSubmit.addEventListener("click", submitInitials);
-// clearHighscores.addEventListener("click", clearScores);
+
