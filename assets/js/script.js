@@ -148,8 +148,7 @@ function submitInitials(event) {
         return;
     }
  
-    // HELP: Cannot read property 'push' of null at HTMLButtonElement.submitInitials 
-    // Research: javascript loads before the HTML elements??
+    // HELP: Cannot store multiple highscores. Updates only one list item with the new high score.
     var str = initialsInputText + " - " + seconds;
     // console.log(highScores);
     highScores = [];
