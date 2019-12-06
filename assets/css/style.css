@@ -30,7 +30,7 @@ nav {
     background: #007bff4d;
 }
 
-input:focus, button:focus  {
-    outline: none;
-    border: none;
-}
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }

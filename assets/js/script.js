@@ -70,13 +70,14 @@ function getHighScores() {
 // Shuffle through questions and populate multiple choices. After the last question. Display the final score.
 function displayQuestions(j) {
     if (j === questions.length) {
-        setTimeout(displayFinalScore, 2000);
+        setTimeout(displayFinalScore, 1000);
         clearInterval(interval);
         return;
     }
     quizQuestion.textContent = questions[j].question;
     for (var i = 0; i < questions[j].choices.length; i++) {
         optionsContainer.children[i].value = questions[j].choices[i];
+        // console.log(questions[j].choices[i]);
     }
 }
 
@@ -86,7 +87,7 @@ function displayFinalScore() {
     scoreContainer.setAttribute("style", "display: block;")
     finalScore.textContent = seconds;
     clearInterval(interval);
-    // renderTimer();
+    renderTimer();
 }
 
 // Target multiple choice clicked and check value against correct answer value. If correct, send good message and sound. If incorrect, send bad message, sound and deduct 10 seconds.
@@ -154,6 +155,8 @@ function submitInitials(event) {
     highScores = [];
     highScores.push(str);
     initialsInput.value = "";
+
+    // console.log(highScores);
 
     storeHighScores();
 
