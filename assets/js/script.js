@@ -12,7 +12,7 @@ var scoreContainer = document.querySelector("#finalScoreContainer");
 var finalScore = document.querySelector("#finalScore");
 var highScores = getHighScores();
 
-var seconds = 60;
+var seconds = 40;
 var interval;
 var questionNumber = 0;
 
@@ -37,6 +37,7 @@ function startTimer() {
 
 // If seconds is under 10, add a second 0 digit. If seconds get to 10, turn red for alerting user. If seconds get to 0 or negative, stop timer.
 function renderTimer() {
+    // HELP: This adds an additional zero to the displayed timer after the interval has been cleared. How do I make this only add an additional zero if the seconds are under 10 AND if the timer is not stopped.
     if (seconds < 10) {
         seconds = "0" + seconds.toString();
     }
@@ -86,7 +87,7 @@ function displayFinalScore() {
     scoreContainer.setAttribute("style", "display: block;")
     finalScore.textContent = seconds;
     clearInterval(interval);
-    renderTimer();
+    // renderTimer();
 }
 
 // Target multiple choice clicked and check value against correct answer value. If correct, send good message and sound. If incorrect, send bad message, sound and deduct 10 seconds.
@@ -117,7 +118,9 @@ function userChoice(event) {
             seconds = seconds - 10;
         }
         else {
+            clearInterval(interval);
             seconds = 0;
+            renderTimer();
         }
     }
     
@@ -144,10 +147,12 @@ function submitInitials(event) {
     if (initialsInputText === "") {
         return;
     }
-
+ 
     // HELP: Cannot read property 'push' of null at HTMLButtonElement.submitInitials 
     // Research: javascript loads before the HTML elements??
     var str = initialsInputText + " " + seconds;
+    console.log(highScores);
+    highScores = [];
     highScores.push(str);
     initialsInput.value = "";
 

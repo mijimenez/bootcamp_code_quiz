@@ -20,3 +20,11 @@ nav {
 #options input {
     margin-bottom: 1em;
 }
+
+#highScoresList {
+    list-style: none;
+}
+
+#highScoresList li {
+    background: #007bff4d;
+}
