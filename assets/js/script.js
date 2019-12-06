@@ -12,7 +12,7 @@ var scoreContainer = document.querySelector("#finalScoreContainer");
 var finalScore = document.querySelector("#finalScore");
 var highScores = getHighScores();
 
-var seconds = 40;
+var seconds = 75;
 var interval;
 var questionNumber = 0;
 
@@ -77,7 +77,6 @@ function displayQuestions(j) {
     quizQuestion.textContent = questions[j].question;
     for (var i = 0; i < questions[j].choices.length; i++) {
         optionsContainer.children[i].value = questions[j].choices[i];
-        console.log(questions[j].choices[i]);
     }
 }
 
@@ -98,18 +97,18 @@ function userChoice(event) {
     results.appendChild(resultsMessage);
     resultsMessage.setAttribute("style", "border-top: thin solid grey; margin-top: 1em; padding-top: 1em;")
 
-    console.log("Chosen: " + userInput);
-    console.log("Correct answer is: " + questions[questionNumber].correctAnswer);
-    console.log("---------");
+    // console.log("Chosen: " + userInput);
+    // console.log("Correct answer is: " + questions[questionNumber].correctAnswer);
+    // console.log("---------");
     
     if (userInput === questions[questionNumber].correctAnswer) {
-        console.log("Correct!");
+        // console.log("Correct!");
         correctAudio.play(); 
         resultsMessage.textContent = "Correct!";
         results.setAttribute("style", "color: green;")
     }
     else {
-        console.log("Incorrect...");
+        // console.log("Incorrect...");
         incorrectAudio.play(); 
         resultsMessage.textContent = "Incorrect! -10 sec.";
         results.setAttribute("style", "color: red;")
@@ -150,13 +149,11 @@ function submitInitials(event) {
  
     // HELP: Cannot read property 'push' of null at HTMLButtonElement.submitInitials 
     // Research: javascript loads before the HTML elements??
-    var str = initialsInputText + " " + seconds;
-    console.log(highScores);
+    var str = initialsInputText + " - " + seconds;
+    // console.log(highScores);
     highScores = [];
     highScores.push(str);
     initialsInput.value = "";
-
-    console.log(highScores);
 
     storeHighScores();
 

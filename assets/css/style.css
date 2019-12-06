@@ -12,7 +12,7 @@ nav {
 }
 
 @media screen and (max-width: 576px) {
-    #startBtn, #initialsSubmit {
+    #startBtn, #initialsSubmit, #goBack, #clearHighscoresID {
         width: 100%;
     }
 }
@@ -23,8 +23,14 @@ nav {
 
 #highScoresList {
     list-style: none;
+    padding: 0;
 }
 
 #highScoresList li {
     background: #007bff4d;
+}
+
+input:focus, button:focus  {
+    outline: none;
+    border: none;
 }
