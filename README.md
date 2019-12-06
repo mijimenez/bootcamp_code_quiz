@@ -2,7 +2,7 @@
 
 * Application Instructions:
 
-    Open HTML file to begin application.
+    Open index.html to begin application.
 
 
 * Programming Languages & Framesworks Used:
@@ -24,6 +24,6 @@
 
   Clicking the "Start Quiz" button presents the user with a series of questions. The timer is initialized with a value and immediately begins countdown.
 
-  Score is calculated by time remaining. Answering quickly and correctly results in a higher score. Answering incorrectly results in a time penalty (for example, 15 seconds are subtracted from time remaining).
+  Score is calculated by time remaining. Answering quickly and correctly results in a higher score. Answering incorrectly results in a time penalty (10 seconds are subtracted from time remaining).
 
   When time runs out and/or all questions are answered, the user is presented with their final score and asked to enter their initials. Their final score and initials are then stored in `localStorage`.
