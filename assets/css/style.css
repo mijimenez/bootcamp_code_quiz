@@ -40,6 +40,7 @@ nav {
 
 #highScoresList li {
     background: #007bff4d;
+    margin-top: .5em;
 }
 
 .btn:focus,.btn:active {

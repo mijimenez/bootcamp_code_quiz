@@ -10,7 +10,6 @@ var correctAudio = document.querySelector("#correctAudio");
 var incorrectAudio = document.querySelector("#incorrectAudio");
 var scoreContainer = document.querySelector("#finalScoreContainer");
 var finalScore = document.querySelector("#finalScore");
-var highScores = getHighScores();
 
 var seconds = 75;
 var interval;
@@ -58,12 +57,8 @@ function getHighScores() {
     var storedHighScores = JSON.parse(localStorage.getItem("highScores"));
 
     if (storedHighScores === null) {
-        highScores = [];
+        storedHighScores = [];
     }
-    else {
-        highScores = storedHighScores;
-    }
-
     return(storedHighScores);
   }
 
@@ -148,23 +143,21 @@ function submitInitials(event) {
         return;
     }
  
-    // HELP: Cannot store multiple highscores. Updates only one list item with the new high score.
+
     var str = initialsInputText + " - " + seconds;
     // console.log(highScores);
-    highScores = [];
+    var highScores = getHighScores();
     highScores.push(str);
     initialsInput.value = "";
 
-    // console.log(highScores);
-
-    storeHighScores();
+    storeHighScores(highScores);
 
     // After initials w/ score is submitted, redirect to the scoreboard.
     window.location.href = "scoreboard.html";
   };
 
   // Store scores to local storage.
-  function storeHighScores() {
+  function storeHighScores(highScores) {
     localStorage.setItem("highScores", JSON.stringify(highScores));
   }
 

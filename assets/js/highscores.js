@@ -4,7 +4,6 @@ var initialsSubmit = document.querySelector("#initialsSubmit");
 var initialsInput = document.querySelector("#initialsInput");
 var clearHighscores = document.querySelector("#clearHighscoresID");
 
-var highScores = [];
 
 
 // ----- Functions
@@ -31,8 +30,8 @@ function renderHighScores() {
 function getHighScores() {
     var storedHighScores = JSON.parse(localStorage.getItem("highScores"));
 
-    if (storedHighScores !== null) {
-        highScores = storedHighScores;
+    if (storedHighScores === null) {
+        storedHighScores = [];
     }
 
     return(storedHighScores);
